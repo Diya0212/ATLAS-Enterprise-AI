@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     aws_region:str='us-east-1'
     aws_access_key_id:str=''
     aws_secret_access_key:str=''
+    aws_session_token:str=''
     s3_bucket:str=''
     database_url:str=''  # Render PostgreSQL External Database URL
     bedrock_embed_model:str='amazon.titan-embed-text-v2:0'

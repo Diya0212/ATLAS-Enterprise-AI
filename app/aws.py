@@ -15,7 +15,7 @@ def client(service):
     if s.aws_access_key_id and s.aws_secret_access_key:
         options.update(aws_access_key_id=s.aws_access_key_id,
                        aws_secret_access_key=s.aws_secret_access_key)
-       
+
     return boto3.client(service, **options)
 
 
