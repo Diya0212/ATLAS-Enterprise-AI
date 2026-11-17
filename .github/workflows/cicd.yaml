@@ -309,13 +309,17 @@ jobs:
             exit 1
           fi
 
-          curl --fail --silent --show-error \
+          if ! curl --fail --silent --show-error \
             --retry 5 \
             --retry-delay 3 \
-            http://127.0.0.1:8000/ \
-            > /dev/null
+            http://127.0.0.1:8000/health/ready \
+            > /dev/null; then
+            echo "::error::Application readiness check failed"
+            docker logs --tail 100 atlas-enterprise-ai
+            exit 1
+          fi
 
-          echo "Atlas Enterprise AI deployed successfully"
+          echo "Atlas Enterprise AI is ready"
 
       # ----------------------------------------
       # CLEANUP

@@ -1,3 +1,4 @@
+import logging
 import re
 import uuid
 from pathlib import Path
@@ -18,6 +19,7 @@ from worker.ingest import process_s3_key
 
 initialize()
 
+logger = logging.getLogger(__name__)
 
 BASE=Path(__file__).resolve().parent
 app=FastAPI(title='Atlas Enterprise RAG',docs_url='/api/docs')
@@ -58,6 +60,7 @@ def ready():
         with connection() as conn: conn.execute('SELECT 1').fetchone()
         return {'status':'ready'}
     except Exception as exc:
+        logger.exception("Database readiness check failed")
         raise HTTPException(503,'Database unavailable') from exc
 
 
