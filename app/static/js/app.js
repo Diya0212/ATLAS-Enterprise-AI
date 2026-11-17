@@ -38,8 +38,26 @@ const api = async (path, options = {}) => {
     ...options,
     headers: { "Content-Type": "application/json", ...(options.headers || {}) },
   });
-  const data = await res.json();
-  if (!res.ok) throw Error(data.detail || "Request failed");
+  const body = await res.text();
+  let data = {};
+  if (body) {
+    try {
+      data = JSON.parse(body);
+    } catch {
+      if (!res.ok)
+        throw Error(`Request failed (${res.status}): ${body.slice(0, 300)}`);
+      throw Error(`Server returned an invalid response (HTTP ${res.status}).`);
+    }
+  }
+  if (!res.ok) {
+    const detail =
+      typeof data.detail === "string"
+        ? data.detail
+        : data.detail
+          ? JSON.stringify(data.detail)
+          : `Request failed (${res.status})`;
+    throw Error(detail);
+  }
   return data;
 };
 function view(name) {
