@@ -8,7 +8,7 @@ from app.config import settings
 def connection():
     # Render provides a PostgreSQL connection URL. Prefer its external URL
     # for a FastAPI process running on your computer.
-    url = settings().database_url
+    url = settings().database_url.strip()
     if not url:
         raise RuntimeError("DATABASE_URL is missing from .env")
     with psycopg.connect(url, row_factory=dict_row, connect_timeout=10) as conn:
